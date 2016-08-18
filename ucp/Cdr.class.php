@@ -224,11 +224,11 @@ class Cdr extends Modules{
 				case 'dial':
 					switch($call['disposition']) {
 						case 'ANSWERED':
-							if($call['src'] == $self) {
+							if($call['src'] == $self || false !== strpos($call['channel'], "/$self-")) {
 								$call['icons'][] = 'fa-arrow-right out';
 								$device = $this->UCP->FreePBX->Core->getDevice($call['dst']);
 								$call['text'] = !empty($device['description']) ? htmlentities('"'.$device['description'].'"' . " <".$call['dst'].">",ENT_COMPAT | ENT_HTML401, "UTF-8") : $call['dst'];
-							} elseif($call['dst'] == $self) {
+							} elseif($call['dst'] == $self || false !== strpos($call['dstchannel'], "/$self-")) {
 								$call['icons'][] = 'fa-arrow-left in';
 								$call['text'] = htmlentities($call['clid'],ENT_COMPAT | ENT_HTML401, "UTF-8");
 							} elseif($call['cnum'] == $self) {
@@ -242,12 +242,12 @@ class Cdr extends Modules{
 						case 'NO ANSWER':
 							//Remove the recording reference as these are almost always errors (from what I've seen)
 							$call['recordingfile'] = '';
-							if($call['src'] == $self) {
+							if($call['src'] == $self || false !== strpos($call['channel'], "/$self-")) {
 								$device = $this->UCP->FreePBX->Core->getDevice($call['dst']);
 								$call['icons'][] = 'fa-arrow-right out';
 								$call['icons'][] = 'fa-ban';
 								$call['text'] = !empty($device['description']) ? htmlentities('"'.$device['description'].'"' . " <".$call['dst'].">",ENT_COMPAT | ENT_HTML401, "UTF-8") : $call['dst'];
-							} elseif($call['dst'] == $self) {
+							} elseif($call['dst'] == $self || false !== strpos($call['dstchannel'], "/$self-")) {
 								$call['icons'][] = 'fa-ban';
 								$call['icons'][] = 'fa-arrow-left in';
 								$call['text'] = htmlentities($call['clid'],ENT_COMPAT | ENT_HTML401, "UTF-8");
@@ -259,12 +259,12 @@ class Cdr extends Modules{
 							}
 						break;
 						case 'BUSY':
-							if($call['src'] == $self) {
+							if($call['src'] == $self || false !== strpos($call['channel'], "/$self-")) {
 								$device = $this->UCP->FreePBX->Core->getDevice($call['dst']);
 								$call['icons'][] = 'fa-arrow-right out';
 								$call['icons'][] = 'fa-clock-o';
 								$call['text'] = !empty($device['description']) ? htmlentities('"'.$device['description'].'"' . " <".$call['dst'].">",ENT_COMPAT | ENT_HTML401, "UTF-8") : $call['dst'];
-							} elseif($call['dst'] == $self) {
+							} elseif($call['dst'] == $self || false !== strpos($call['dstchannel'], "/$self-")) {
 								$call['icons'][] = 'fa-ban';
 								$call['icons'][] = 'fa-clock-o';
 								$call['text'] = $call['clid'];
